@@ -152,7 +152,7 @@ const Contact = () => {
               </div>
             </div>
 
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 space-y-8">
               <div className="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">SEND A MESSAGE</h3>
                 <p className="text-gray-500 text-sm mb-6">Fill in your details and we'll get back to you as soon as possible.</p>
@@ -204,28 +204,28 @@ const Contact = () => {
                   </form>
                 )}
               </div>
-            </div>
-          </div>
 
-          <div className="mt-16">
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
-              <h3 className="font-bold text-gray-900 text-lg uppercase tracking-wider">Our Location — Kandy, Sri Lanka</h3>
-              <a href={mapDirectionsUrl} target="_blank" rel="noopener noreferrer" className="text-red-600 text-xs font-bold uppercase inline-flex items-center space-x-1 hover:underline flex-shrink-0">
-                <ExternalLink size={14} />
-                <span>Open in Google Maps</span>
-              </a>
-            </div>
-            <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm h-96">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d202429.3511373087!2d80.5714!3d7.2906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae366889418ece9%3A0x9b2fce6d1b83ca03!2sKandy%2C%20Sri%20Lanka!5e0!3m2!1sen!2slk!4v1700000000000!5m2!1sen!2slk"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="DriveX Location - Kandy, Sri Lanka"
-              ></iframe>
+              <div>
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
+                  <h3 className="font-bold text-gray-900 text-lg uppercase tracking-wider">Our Location — Kandy, Sri Lanka</h3>
+                  <a href={mapDirectionsUrl} target="_blank" rel="noopener noreferrer" className="text-red-600 text-xs font-bold uppercase inline-flex items-center space-x-1 hover:underline flex-shrink-0">
+                    <ExternalLink size={14} />
+                    <span>Open in Google Maps</span>
+                  </a>
+                </div>
+                <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm h-[420px]">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d202429.3511373087!2d80.5714!3d7.2906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae366889418ece9%3A0x9b2fce6d1b83ca03!2sKandy%2C%20Sri%20Lanka!5e0!3m2!1sen!2slk!4v1700000000000!5m2!1sen!2slk"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="DriveX Location - Kandy, Sri Lanka"
+                  ></iframe>
+                </div>
+              </div>
             </div>
           </div>
         </div>
