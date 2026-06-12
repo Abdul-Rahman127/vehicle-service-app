@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import { useApp } from '../context/AppContext';
 import SafeImage from '../components/SafeImage';
 import IMAGES, { getServiceImage } from '../utils/serviceImages';
+import CountUp from '../components/CountUp';
 
 const Home = () => {
   const { services, publicStats } = useApp();
@@ -62,15 +63,15 @@ const Home = () => {
               <SafeImage src={IMAGES.statsBg} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover opacity-20 rounded-xl" />
               <div className="relative grid grid-cols-2 sm:grid-cols-4 gap-6 text-center sm:text-left py-4">
               <div>
-                <h4 className="text-3xl font-extrabold text-white">{publicStats.totalCompleted || 0}+</h4>
+                <h4 className="text-3xl font-extrabold text-white"><CountUp end={publicStats.totalCompleted || 0} suffix="+" /></h4>
                 <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold mt-1">Services Done</p>
               </div>
               <div>
-                <h4 className="text-3xl font-extrabold text-white">{publicStats.satisfactionPercent || 98}%</h4>
+                <h4 className="text-3xl font-extrabold text-white"><CountUp end={publicStats.satisfactionPercent || 98} suffix="%" /></h4>
                 <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold mt-1">Satisfaction</p>
               </div>
               <div>
-                <h4 className="text-3xl font-extrabold text-white">{publicStats.serviceCount || 6}+</h4>
+                <h4 className="text-3xl font-extrabold text-white"><CountUp end={publicStats.serviceCount || 6} suffix="+" /></h4>
                 <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold mt-1">Service Types</p>
               </div>
               <div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { KeyRound, ShieldAlert } from 'lucide-react';
+import CountUp from '../components/CountUp';
 
 const Login = () => {
   const { login, publicStats } = useApp();
@@ -81,15 +82,15 @@ const Login = () => {
         {/* Stats */}
         <div className="relative z-10 border-t border-red-800/60 pt-6 grid grid-cols-3 gap-4 text-center sm:text-left">
           <div>
-            <span className="text-lg font-black block">{publicStats.totalCompleted || 0}+</span>
+            <span className="text-lg font-black block"><CountUp end={publicStats.totalCompleted || 0} suffix="+" /></span>
             <span className="text-[10px] text-red-300 uppercase font-bold tracking-wider">Total Bookings</span>
           </div>
           <div>
-            <span className="text-lg font-black block">{publicStats.satisfactionPercent || 98}%</span>
+            <span className="text-lg font-black block"><CountUp end={publicStats.satisfactionPercent || 98} suffix="%" /></span>
             <span className="text-[10px] text-red-300 uppercase font-bold tracking-wider">Satisfaction</span>
           </div>
           <div>
-            <span className="text-lg font-black block">{publicStats.serviceCount || 6}+</span>
+            <span className="text-lg font-black block"><CountUp end={publicStats.serviceCount || 6} suffix="+" /></span>
             <span className="text-[10px] text-red-300 uppercase font-bold tracking-wider">Services</span>
           </div>
         </div>
