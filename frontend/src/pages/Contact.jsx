@@ -208,22 +208,12 @@ const Contact = () => {
           </div>
 
           <div className="mt-16">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6 items-stretch">
-              <div className="lg:col-span-2 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-                <h3 className="font-bold text-gray-900 text-lg uppercase tracking-wider">Our Location — Kandy, Sri Lanka</h3>
-                <a href={mapDirectionsUrl} target="_blank" rel="noopener noreferrer" className="text-red-600 text-xs font-bold uppercase inline-flex items-center space-x-1 hover:underline flex-shrink-0">
-                  <ExternalLink size={14} />
-                  <span>Open in Google Maps</span>
-                </a>
-              </div>
-              <div className="bg-white rounded-xl overflow-hidden border border-gray-200 shadow-sm flex flex-col">
-                <SafeImage src={IMAGES.contactLocation} alt="Vehicle service center" className="h-32 w-full object-cover object-center" />
-                <div className="p-4 flex-1">
-                  <p className="font-bold text-gray-900 text-sm">DriveX Service Center</p>
-                  <p className="text-gray-600 text-xs mt-1">{business.address}, {business.city}</p>
-                  <p className="text-gray-500 text-xs mt-2">Professional automotive care in the heart of Kandy.</p>
-                </div>
-              </div>
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+              <h3 className="font-bold text-gray-900 text-lg uppercase tracking-wider">Our Location — Kandy, Sri Lanka</h3>
+              <a href={mapDirectionsUrl} target="_blank" rel="noopener noreferrer" className="text-red-600 text-xs font-bold uppercase inline-flex items-center space-x-1 hover:underline flex-shrink-0">
+                <ExternalLink size={14} />
+                <span>Open in Google Maps</span>
+              </a>
             </div>
             <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm h-96">
               <iframe
