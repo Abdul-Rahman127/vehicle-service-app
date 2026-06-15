@@ -1,6 +1,5 @@
 // DriveX Vehicle Service Booking System - Backend Server
 const express = require('express');
-const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
@@ -10,29 +9,30 @@ dotenv.config();
 
 const app = express();
 
-// ─── CORS Configuration ────────────────────────────────────────────────────
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (curl, mobile apps, Postman)
-    if (!origin) return callback(null, true);
-    // Allow any Vercel subdomain (covers ALL preview + production deployments)
-    if (/\.vercel\.app$/.test(origin)) return callback(null, true);
-    // Allow localhost / 127.0.0.1 for local dev
-    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return callback(null, true);
-    console.warn(`CORS blocked for origin: ${origin}`);
-    return callback(new Error(`CORS: origin '${origin}' not allowed`));
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  optionsSuccessStatus: 200,
-};
+// ─── CORS — manual headers (works for all vercel.app subdomains) ────────────
+app.use(function (req, res, next) {
+  const origin = req.headers.origin;
 
-// Apply CORS to every request
-app.use(cors(corsOptions));
+  // Allow any *.vercel.app subdomain and localhost
+  if (
+    !origin ||
+    /\.vercel\.app$/.test(origin) ||
+    /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
+  ) {
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  }
 
-// Explicitly handle preflight OPTIONS for ALL routes with same config
-app.options('*', cors(corsOptions));
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+  // Handle preflight immediately
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  next();
+});
 
 // ─── Body Parsing ──────────────────────────────────────────────────────────
 app.use(express.json({ limit: '3mb' }));
@@ -58,6 +58,7 @@ app.get('/', (req, res) => {
     message: 'DriveX API is running',
     mongodb: dbStates[require('mongoose').connection.readyState] || 'unknown',
     timestamp: new Date().toISOString(),
+    version: '2.0.0',
   });
 });
 
@@ -69,6 +70,7 @@ const startServer = async () => {
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`Version: 2.0.0 - manual CORS headers`);
   });
 };
 
