@@ -1,4 +1,4 @@
-// DriveX Vehicle Service Booking System - Backend Server
+// DriveX Vehicle Service Booking System - Backend Server v3.0
 const express = require('express');
 const path = require('path');
 const dotenv = require('dotenv');
@@ -9,28 +9,26 @@ dotenv.config();
 
 const app = express();
 
-// ─── CORS — manual headers (works for all vercel.app subdomains) ────────────
+// ─── CORS: Set headers on EVERY response (before anything else) ────────────
 app.use(function (req, res, next) {
+  // Set CORS headers unconditionally for all vercel.app origins and localhost
   const origin = req.headers.origin;
-
-  // Allow any *.vercel.app subdomain and localhost
-  if (
-    !origin ||
-    /\.vercel\.app$/.test(origin) ||
-    /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
-  ) {
-    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  if (origin && (/\.vercel\.app$/.test(origin) || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin))) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else if (!origin) {
+    // No origin header (Postman, curl, server-to-server) - allow
+    res.setHeader('Access-Control-Allow-Origin', '*');
   }
-
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Max-Age', '86400'); // Cache preflight 24 hours
 
-  // Handle preflight immediately
+  // Immediately respond to preflight OPTIONS requests
   if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+    console.log(`[PREFLIGHT] ${req.headers.origin} → ${req.path}`);
+    return res.sendStatus(200);
   }
-
   next();
 });
 
@@ -41,6 +39,12 @@ app.use(express.urlencoded({ extended: true, limit: '3mb' }));
 // ─── Static Files ──────────────────────────────────────────────────────────
 app.use('/uploads', express.static(uploadsDir));
 app.use('/images', express.static(imagesDir));
+
+// ─── Request Logger ────────────────────────────────────────────────────────
+app.use(function (req, res, next) {
+  console.log(`[${req.method}] ${req.path} — Origin: ${req.headers.origin || 'none'}`);
+  next();
+});
 
 // ─── API Routes ────────────────────────────────────────────────────────────
 app.use('/api/auth',          require('./routes/authRoutes'));
@@ -58,8 +62,16 @@ app.get('/', (req, res) => {
     message: 'DriveX API is running',
     mongodb: dbStates[require('mongoose').connection.readyState] || 'unknown',
     timestamp: new Date().toISOString(),
-    version: '2.0.0',
+    version: '3.0.0',
   });
+});
+
+// ─── Error Handler (also sets CORS so errors don't block the browser) ──────
+app.use(function (err, req, res, next) {
+  console.error('[ERROR]', err.message);
+  const origin = req.headers.origin;
+  if (origin) res.setHeader('Access-Control-Allow-Origin', origin);
+  res.status(err.status || 500).json({ error: err.message || 'Internal Server Error' });
 });
 
 // ─── Start Server ──────────────────────────────────────────────────────────
@@ -68,9 +80,12 @@ const PORT = process.env.PORT || 5000;
 const startServer = async () => {
   await connectDB();
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-    console.log(`Version: 2.0.0 - manual CORS headers`);
+    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+    console.log(`  DriveX API v3.0.0`);
+    console.log(`  Port:    ${PORT}`);
+    console.log(`  Env:     ${process.env.NODE_ENV || 'development'}`);
+    console.log(`  CORS:    manual headers (all *.vercel.app)`);
+    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
   });
 };
 
